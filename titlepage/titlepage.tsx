@@ -22,19 +22,19 @@ export default function Titlepage()
     //         console.table(events);
     //     }
     // }
-    const [a, setA] = useState(0);
-    const [b, setB] = useState(0);
-    const [r, setR] = useState(0);
+    // const [a, setA] = useState(0);
+    // const [b, setB] = useState(0);
+    // const [r, setR] = useState(0);
 
-    async function calculate()
-    {
-        const response = await fetch(`/api/events?a=${a}&b=${b}`, {method: "GET", headers: {Authorization: "skibiditoilet"}})
-        if (response.ok)
-        {
-            const data = await response.json();
-            setR(data.result);
-        }
-    }
+    // async function calculate()
+    // {
+    //     const response = await fetch(`/api/events?a=${a}&b=${b}`, {method: "GET", headers: {Authorization: "skibiditoilet"}})
+    //     if (response.ok)
+    //     {
+    //         const data = await response.json();
+    //         setR(data.result);
+    //     }
+    // }
 
 
 
@@ -151,7 +151,7 @@ export default function Titlepage()
 
     return (
         <div className = "flex container">
-            <button onClick={() => play()}>
+            <button onClick={() => clicktrunks()}>
                 <Image src={myimage} width={500} height={500} alt="thedrink"/>
             </button>
             <p>
