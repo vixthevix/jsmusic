@@ -67,14 +67,10 @@ export default function Titlepage()
     // const mysound = "/sounds/LegoYodaDead.mp3"
     // const [play] = useSound(mysound)
 
-    const boopSfx = '/public/sounds/LegoYodaDeath.mp3'
-    function play()
-    {
-        console.log("hello");
-        useSound(boopSfx);
-    }
+    const boopSfx = '/sounds/LegoYodaDead.mp3'
+    const [playBoop] = useSound(boopSfx, {volume: 0.5});
 
-
+    const [isplaying, setisplaying] = useState(false);
     function downHandler({key}: any)
     {
         // isPressedSet(true);
@@ -83,12 +79,15 @@ export default function Titlepage()
         switch (key)
         {
             case '1':
+                //clicktrunks()
                 keyimgSet(keydownimg);
-                //{play}
+                //{() => play}
+                setisplaying(true)
                 break;
             case '2':
                 keyimg2Set(keydownimg);
-                //{play}
+                //{() => playBoop}
+                setisplaying(true)
                 break;
         }
     }
@@ -101,9 +100,11 @@ export default function Titlepage()
         {
             case '1':
                 keyimgSet(keyupimg);
+                setisplaying(false);
                 break;
             case '2':
                 keyimg2Set(keyupimg);
+                setisplaying(false);
                 break;
         }
     }
@@ -124,34 +125,42 @@ export default function Titlepage()
         }
     }, []);
 
+    //use effect checks if whatever variable inside the square brackets changes. if it does, do the thing inside
     useEffect(() => {
-        if (isPressed)
+        if (isplaying)
         {
-            console.log("hello");
-            keyimgSet(keydownimg);
-            keyvalSet("true");
+            playBoop();
         }
-        else
-        {
-            console.log("goodbye");
-            keyimgSet(keyupimg);
-            keyvalSet("false");
-        }
-    }, []);
+    }, [isplaying]);
+
+    // useEffect(() => {
+    //     if (isPressed)
+    //     {
+    //         console.log("hello");
+    //         keyimgSet(keydownimg);
+    //         keyvalSet("true");
+    //     }
+    //     else
+    //     {
+    //         console.log("goodbye");
+    //         keyimgSet(keyupimg);
+    //         keyvalSet("false");
+    //     }
+    // }, []);
 
     // const imageStyle = {
     //     borderRadius: '50%',
     //     border: '1px solid #fff',
     //   }
 
-    // function pianoEvent()
-    // {
-
-    // }
+    function pianoEvent()
+    {
+        playBoop();
+    }
 
     return (
         <div className = "flex container">
-            <button onClick={() => clicktrunks()}>
+            <button onClick={() => pianoEvent()}>
                 <Image src={myimage} width={500} height={500} alt="thedrink"/>
             </button>
             <p>
