@@ -519,56 +519,59 @@ export default function Titlepage()
         playBoop();
     }
 
+    const whitekeysize = 50;
+    const blackkeysize = 30;
+
     return (
         
         <div>
             <title>
-                hello
+                Online Keyboard
             </title>
             <div className = "flex container" style = {{display:"flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
                 <div style = {{display:"flex"}}>
-                    <Image src = {key1} width = {100} height = {100} alt="key1"/>
+                    <Image src = {key1} width = {whitekeysize} height = {whitekeysize} alt="key1"/>
 
-                    <Image src = {key1h} width = {75} height = {75} alt="key1h" style={{position: "absolute", transform: "translate(83%, 0%)"}}/>
+                    <Image src = {key1h} width = {blackkeysize} height = {blackkeysize} alt="key1h" style={{position: "absolute", transform: "translate(115%, 0%)"}}/>
 
-                    <Image src = {key2} width = {100} height = {100} alt="key2"/>
+                    <Image src = {key2} width = {whitekeysize} height = {whitekeysize} alt="key2"/>
 
-                    <Image src = {key2h} width = {75} height = {75} alt="key2h" style={{position: "absolute", transform: "translate(217%, 0%)"}}/>
+                    <Image src = {key2h} width = {blackkeysize} height = {blackkeysize} alt="key2h" style={{position: "absolute", transform: "translate(285%, 0%)"}}/>
 
-                    <Image src = {key3} width = {100} height = {100} alt="key3"/>
-                    <Image src = {key4} width = {100} height = {100} alt="key4"/>
+                    <Image src = {key3} width = {whitekeysize} height = {whitekeysize} alt="key3"/>
+                    <Image src = {key4} width = {whitekeysize} height = {whitekeysize} alt="key4"/>
 
-                    <Image src = {key4h} width = {75} height = {75} alt="key4h" style={{position: "absolute", transform: "translate(483%, 0%)"}}/>
+                    <Image src = {key4h} width = {blackkeysize} height = {blackkeysize} alt="key4h" style={{position: "absolute", transform: "translate(619%, 0%)"}}/>
 
-                    <Image src = {key5} width = {100} height = {100} alt="key5"/>
+                    <Image src = {key5} width = {whitekeysize} height = {whitekeysize} alt="key5"/>
 
-                    <Image src = {key5h} width = {75} height = {75} alt="key5h" style={{position: "absolute", transform: "translate(617%, 0%)"}}/>
+                    <Image src = {key5h} width = {blackkeysize} height = {blackkeysize} alt="key5h" style={{position: "absolute", transform: "translate(785%, 0%)"}}/>
 
-                    <Image src = {key6} width = {100} height = {100} alt="key6"/>
+                    <Image src = {key6} width = {whitekeysize} height = {whitekeysize} alt="key6"/>
 
-                    <Image src = {key6h} width = {75} height = {75} alt="key6h" style={{position: "absolute", transform: "translate(750%, 0%)"}}/>
+                    <Image src = {key6h} width = {blackkeysize} height = {blackkeysize} alt="key6h" style={{position: "absolute", transform: "translate(950%, 0%)"}}/>
 
-                    <Image src = {key7} width = {100} height = {100} alt="key7"/>
+                    <Image src = {key7} width = {whitekeysize} height = {whitekeysize} alt="key7"/>
                 </div>
             </div>
             {/*dealing with octave buttons*/}
             <div>
                 <button onClick={() => decOct()}>
-                    <Image src = {prevoct} width = {200} height = {200} alt = "NextOct" style={{position: "absolute", transform: "translate(400%, -400%)"}}/>
+                    <Image src = {prevoct} width = {100} height = {100} alt = "NextOct" style={{position: "absolute", transform: "translate(450%, -420%)"}}/>
                 </button>
                 <button onClick={() => incOct()}>
-                    <Image src = {nextoct} width = {200} height = {200} alt = "NextOct" style={{position: "absolute", transform: "translate(1000%, -398%)"}}/>
+                    <Image src = {nextoct} width = {100} height = {100} alt = "NextOct" style={{position: "absolute", transform: "translate(975%, -420%)"}}/>
                 </button>
                 <button onClick={() => changefunky()}>
-                    <Image src = {funkyimage} width = {400} height = {400} alt = "funky" style={{position: "absolute", transform: "translate(600%, -235%)"}}/>
+                    <Image src = {funkyimage} width = {200} height = {200} alt = "funky" style={{position: "absolute", transform: "translate(600%, -235%)"}}/>
                 </button>
             </div>
             {/*Text and stuff*/}
             <div>
-                <u style={{color:"black", fontSize:"350px", fontFamily:"Papyrus", font:"Papyrus", position:"absolute", transform: "translate(0%, -290%)"}}>
+                <u style={{color:"black", fontSize:"100px", fontFamily:"Papyrus", font:"Papyrus", position:"absolute", transform: "translate(40%, -500%)"}}>
                     <b>Online Keyboard</b>
                 </u>
-                <p style={{fontSize:"70px", fontFamily:"Papyrus", font:"Papyrus", position:"absolute", transform: "translate(0%, -135%)"}}>
+                <p style={{fontSize:"30px", fontFamily:"Papyrus", font:"Papyrus", position:"absolute", transform: "translate(0%, -125%)"}}>
                     Here is an online keyboard you can play on. Use the arrow keys to change the octave, and press the Funky button to get funky. <br />
                     Future additions will include more octaves and a nicer website design. <br />
                     <b>Use the keys Q -{">"} U and 2 -{">"} 7 to play</b>
