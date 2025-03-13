@@ -514,13 +514,10 @@ export default function Titlepage()
     //   }
     //style={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}
 
-    function pianoEvent()
-    {
-        playBoop();
-    }
-
     const whitekeysize = 50;
     const blackkeysize = 30;
+    const textfont = "Consolas"
+    const funkyfont = "Papyrus"
 
     return (
         
@@ -568,12 +565,13 @@ export default function Titlepage()
             </div>
             {/*Text and stuff*/}
             <div>
-                <u style={{color:"black", fontSize:"100px", fontFamily:"Papyrus", font:"Papyrus", position:"absolute", transform: "translate(40%, -500%)"}}>
+                <u style={{color:"black", fontSize:"100px", fontFamily:textfont, font:textfont, position:"absolute", transform: "translate(40%, -500%)"}}>
                     <b>Online Keyboard</b>
                 </u>
-                <p style={{fontSize:"30px", fontFamily:"Papyrus", font:"Papyrus", position:"absolute", transform: "translate(0%, -125%)"}}>
-                    Here is an online keyboard you can play on. Use the arrow keys to change the octave, and press the Funky button to get funky. <br />
-                    Future additions will include more octaves and a nicer website design. <br />
+                <p style={{fontSize:"30px", fontFamily:textfont, font:textfont, position:"absolute", transform: "translate(0%, -125%)"}}>
+                    Here is an online keyboard you can play on. Use the arrow keys to change the octave, and press the Funky button to get <b><i><u>funky</u></i></b>. <br />
+                    Future additions will include more octaves, a nicer website design and locked text, <br />
+                    as well as possible backend support for making recordings and saving them. <br />
                     <b>Use the keys Q -{">"} U and 2 -{">"} 7 to play</b>
                 </p>
             </div>
