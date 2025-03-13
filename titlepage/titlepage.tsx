@@ -1,4 +1,5 @@
 "use client"
+//import { headers } from "next/headers";
 //"use server"
 //import { signIn } from "next-auth/react";
 import Image from "next/image";
@@ -85,37 +86,81 @@ export default function Titlepage()
     const boopSfx = '/sounds/LegoYodaDead.mp3'
     const [playBoop] = useSound(boopSfx, {volume: 0.5});
 
-    const a3 = 'sounds/a3.mp3'
-    const b3 = 'sounds/b3.mp3'
-    const c3 = 'sounds/c3.mp3'
-    const d3 = 'sounds/d3.mp3'
-    const e3 = 'sounds/e3.mp3'
-    const f3 = 'sounds/f3.mp3'
-    const g3 = 'sounds/g3.mp3'
+    const a3 = 'sounds/oct3/a3.mp3'
+    const b3 = 'sounds/oct3/b3.mp3'
+    const c3 = 'sounds/oct3/c3.mp3'
+    const d3 = 'sounds/oct3/d3.mp3'
+    const e3 = 'sounds/oct3/e3.mp3'
+    const f3 = 'sounds/oct3/f3.mp3'
+    const g3 = 'sounds/oct3/g3.mp3'
+    const a3sharp = 'sounds/oct3/a3sharp.mp3'
+    const c3sharp = 'sounds/oct3/c3sharp.mp3'
+    const d3sharp = 'sounds/oct3/d3sharp.mp3'
+    const f3sharp = 'sounds/oct3/f3sharp.mp3'
+    const g3sharp = 'sounds/oct3/g3sharp.mp3'
 
-    const a3sharp = 'sounds/a3sharp.mp3'
-    const c3sharp = 'sounds/c3sharp.mp3'
-    const d3sharp = 'sounds/d3sharp.mp3'
-    const f3sharp = 'sounds/f3sharp.mp3'
-    const g3sharp = 'sounds/g3sharp.mp3'
+    const fun1 = 'sounds/funky/bone.mp3'
+    const fun2 = 'sounds/funky/estoesparagohan.mp3'
+    const fun3 = 'sounds/funky/fart.mp3'
+    const fun4 = 'sounds/funky/fortnite.mp3'
+    const fun5 = 'sounds/funky/laugh.mp3'
+    const fun6 = 'sounds/funky/LegoYodaDead.mp3'
+    const fun7 = 'sounds/funky/metalpipe.mp3'
+    const fun8 = 'sounds/funky/prowler.mp3'
+    const fun9 = 'sounds/funky/table.mp3'
+    const funa = 'sounds/funky/vineboom.mp3'
+    const funb = 'sounds/funky/yippie.mp3'
+    const func = 'sounds/funky/nerd.mp3'
+
+    const a4 = 'sounds/oct4/a4.mp3'
+    const b4 = 'sounds/oct4/b4.mp3'
+    const c4 = 'sounds/oct4/c4.mp3'
+    const d4 = 'sounds/oct4/d4.mp3'
+    const e4 = 'sounds/oct4/e4.mp3'
+    const f4 = 'sounds/oct4/f4.mp3'
+    const g4 = 'sounds/oct4/g4.mp3'
+    const a4sharp = 'sounds/oct4/a4sharp.mp3'
+    const c4sharp = 'sounds/oct4/c4sharp.mp3'
+    const d4sharp = 'sounds/oct4/d4sharp.mp3'
+    const f4sharp = 'sounds/oct4/f4sharp.mp3'
+    const g4sharp = 'sounds/oct4/g4sharp.mp3'
+
+    const [a, aSet] = useState(a3)
+    const [b, bSet] = useState(b3)
+    const [c, cSet] = useState(c3)
+    const [d, dSet] = useState(d3)
+    const [e, eSet] = useState(e3)
+    const [f, fSet] = useState(f3)
+    const [g, gSet] = useState(g3)
+    const [ash, ashSet] = useState(a3sharp)
+    const [csh, cshSet] = useState(c3sharp)
+    const [dsh, dshSet] = useState(d3sharp)
+    const [fsh, fshSet] = useState(f3sharp)
+    const [gsh, gshSet] = useState(g3sharp)
+    // const a3sharp = 'sounds/oct3/a3sharp.mp3'
+    // const c3sharp = 'sounds/oct3/c3sharp.mp3'
+    // const d3sharp = 'sounds/oct3/d3sharp.mp3'
+    // const f3sharp = 'sounds/oct3/f3sharp.mp3'
+    // const g3sharp = 'sounds/oct3/g3sharp.mp3'
 
     const normalvolume: number = 0.5;
 
-    const [a3sound] = useSound(a3, {volume: normalvolume});
-    const [b3sound] = useSound(b3, {volume: normalvolume});
-    const [c3sound] = useSound(c3, {volume: normalvolume});
-    const [d3sound] = useSound(d3, {volume: normalvolume});
-    const [e3sound] = useSound(e3, {volume: normalvolume});
-    const [f3sound] = useSound(f3, {volume: normalvolume});
-    const [g3sound] = useSound(g3, {volume: normalvolume});
+
+    const [a3sound] = useSound(a, {volume: normalvolume});
+    const [b3sound] = useSound(b, {volume: normalvolume});
+    const [c3sound] = useSound(c, {volume: normalvolume});
+    const [d3sound] = useSound(d, {volume: normalvolume});
+    const [e3sound] = useSound(e, {volume: normalvolume});
+    const [f3sound] = useSound(f, {volume: normalvolume});
+    const [g3sound] = useSound(g, {volume: normalvolume});
 
     const sharpvolume: number = 2;
 
-    const [a3sharpsound] = useSound(a3sharp, {volume: sharpvolume});
-    const [c3sharpsound] = useSound(c3sharp, {volume: sharpvolume});
-    const [d3sharpsound] = useSound(d3sharp, {volume: sharpvolume});
-    const [f3sharpsound] = useSound(f3sharp, {volume: sharpvolume});
-    const [g3sharpsound] = useSound(g3sharp, {volume: sharpvolume});
+    const [a3sharpsound] = useSound(ash, {volume: sharpvolume});
+    const [c3sharpsound] = useSound(csh, {volume: sharpvolume});
+    const [d3sharpsound] = useSound(dsh, {volume: sharpvolume});
+    const [f3sharpsound] = useSound(fsh, {volume: sharpvolume});
+    const [g3sharpsound] = useSound(gsh, {volume: sharpvolume});
 
 
     const [a3play, a3playSet] = useState(false);
@@ -131,6 +176,118 @@ export default function Titlepage()
     const [d3sharpplay, d3sharpplaySet] = useState(false);
     const [f3sharpplay, f3sharpplaySet] = useState(false);
     const [g3sharpplay, g3sharpplaySet] = useState(false);
+
+    let numModes = 2;
+    enum PianoMode
+    {
+        OCT3,
+        OCT4
+    }
+
+    const [pianoshift, pianoshiftSet] = useState(0);
+    const [pianomode, pianomodeSet] = useState(PianoMode.OCT3);
+
+    const nextoct = "/nextoct.png"
+    const prevoct = "/prevoct.png"
+    const funkyon = "/funkyon.png"
+    const funkyoff = "/funkyoff.png"
+
+    function incOct()
+    {
+        pianoshiftSet((pianoshift + 1) % numModes)
+    }
+    function decOct()
+    {
+        pianoshiftSet(pianoshift - 1)
+        // if (pianoshift < 0)
+        // {
+        //     pianoshiftSet(1);
+        // }
+    }
+
+    const [funkymode, funkymodeSet] = useState(false);
+    const [funkyimage, funkyimageSet] = useState(funkyoff)
+
+    function changefunky()
+    {
+        funkymodeSet(!funkymode)
+    }
+
+    useEffect(() => {
+        funkyimageSet(funkyoff)
+        funkymodeSet(false)
+        if (pianoshift < 0)
+        {
+            pianoshiftSet(numModes - 1);
+        }
+        switch (pianoshift)
+        {
+            case 0:
+                aSet(a3)
+                bSet(b3)
+                cSet(c3)
+                dSet(d3)
+                eSet(e3)
+                fSet(f3)
+                gSet(g3)
+                ashSet(a3sharp)
+                cshSet(c3sharp)
+                dshSet(d3sharp)
+                fshSet(f3sharp)
+                gshSet(g3sharp)
+                break;
+            case 1:
+                aSet(a4)
+                bSet(b4)
+                cSet(c4)
+                dSet(d4)
+                eSet(e4)
+                fSet(f4)
+                gSet(g4)
+                ashSet(a4sharp)
+                cshSet(c4sharp)
+                dshSet(d4sharp)
+                fshSet(f4sharp)
+                gshSet(g4sharp)
+                break;
+        }
+    }, [pianoshift])
+
+    useEffect(() => {
+        if (funkymode)
+        {
+            funkyimageSet(funkyon)
+            aSet(fun1)
+            bSet(fun2)
+            cSet(fun3)
+            dSet(fun4)
+            eSet(fun5)
+            fSet(fun6)
+            gSet(fun7)
+            ashSet(fun8)
+            cshSet(fun9)
+            dshSet(funa)
+            fshSet(funb)
+            gshSet(func)
+        }
+        else
+        {
+            funkyimageSet(funkyoff)
+            pianoshiftSet(0);
+            aSet(a3)
+            bSet(b3)
+            cSet(c3)
+            dSet(d3)
+            eSet(e3)
+            fSet(f3)
+            gSet(g3)
+            ashSet(a3sharp)
+            cshSet(c3sharp)
+            dshSet(d3sharp)
+            fshSet(f3sharp)
+            gshSet(g3sharp)
+        }
+    }, [funkymode])
 
     const [isplaying, setisplaying] = useState(false);
     function downHandler({key}: any)
@@ -363,73 +520,60 @@ export default function Titlepage()
     }
 
     return (
-        <div className = "flex container" style = {{display:"flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
-            {/* <button onClick={() => pianoEvent()}>
-                <Image src={myimage} width={500} height={500} alt="thedrink"/>
-            </button>
-            <p>
-                I HATE EVERYTHING ABOUT YOU 
-            </p>
-            <p>
-                WHY DO I LOVE YOU
-            </p>
-            <p>
-                {myval}
-            </p>
-            <p>
-                {keyval}
-            </p> */}
-            <div style = {{display:"flex"}}>
-                <Image src = {key1} width = {100} height = {100} alt="key1"/>
+        
+        <div>
+            <title>
+                hello
+            </title>
+            <div className = "flex container" style = {{display:"flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
+                <div style = {{display:"flex"}}>
+                    <Image src = {key1} width = {100} height = {100} alt="key1"/>
 
-                <Image src = {key1h} width = {75} height = {75} alt="key1h" style={{position: "absolute", transform: "translate(83%, 0%)"}}/>
+                    <Image src = {key1h} width = {75} height = {75} alt="key1h" style={{position: "absolute", transform: "translate(83%, 0%)"}}/>
 
-                <Image src = {key2} width = {100} height = {100} alt="key2"/>
+                    <Image src = {key2} width = {100} height = {100} alt="key2"/>
 
-                <Image src = {key2h} width = {75} height = {75} alt="key2h" style={{position: "absolute", transform: "translate(217%, 0%)"}}/>
+                    <Image src = {key2h} width = {75} height = {75} alt="key2h" style={{position: "absolute", transform: "translate(217%, 0%)"}}/>
 
-                <Image src = {key3} width = {100} height = {100} alt="key3"/>
-                <Image src = {key4} width = {100} height = {100} alt="key4"/>
+                    <Image src = {key3} width = {100} height = {100} alt="key3"/>
+                    <Image src = {key4} width = {100} height = {100} alt="key4"/>
 
-                <Image src = {key4h} width = {75} height = {75} alt="key4h" style={{position: "absolute", transform: "translate(483%, 0%)"}}/>
+                    <Image src = {key4h} width = {75} height = {75} alt="key4h" style={{position: "absolute", transform: "translate(483%, 0%)"}}/>
 
-                <Image src = {key5} width = {100} height = {100} alt="key5"/>
+                    <Image src = {key5} width = {100} height = {100} alt="key5"/>
 
-                <Image src = {key5h} width = {75} height = {75} alt="key5h" style={{position: "absolute", transform: "translate(617%, 0%)"}}/>
+                    <Image src = {key5h} width = {75} height = {75} alt="key5h" style={{position: "absolute", transform: "translate(617%, 0%)"}}/>
 
-                <Image src = {key6} width = {100} height = {100} alt="key6"/>
+                    <Image src = {key6} width = {100} height = {100} alt="key6"/>
 
-                <Image src = {key6h} width = {75} height = {75} alt="key6h" style={{position: "absolute", transform: "translate(750%, 0%)"}}/>
+                    <Image src = {key6h} width = {75} height = {75} alt="key6h" style={{position: "absolute", transform: "translate(750%, 0%)"}}/>
 
-                <Image src = {key7} width = {100} height = {100} alt="key7"/>
+                    <Image src = {key7} width = {100} height = {100} alt="key7"/>
+                </div>
             </div>
-
-            {/* <form
-                action={async () => {
-                    "use server"
-                    await signIn("google")
-                }}
-                >
-                    <button type="submit">Signin with Google</button>
-            </form> */}
-
-            {/* <div >
-                <p>
-                    A: 
-                </p>
-                <input value={a.toString()} onChange={e => setA(Number.parseInt(e.target.value || "0"))} className = "p-2 rounded shadow text-black"/>
-                <p>
-                    B: 
-                </p>
-                <input value={b.toString()} onChange={e => setB(Number.parseInt(e.target.value || "0"))}/>
-                <button onClick = {() => getData()}>
-                    Calculate
+            {/*dealing with octave buttons*/}
+            <div>
+                <button onClick={() => decOct()}>
+                    <Image src = {prevoct} width = {200} height = {200} alt = "NextOct" style={{position: "absolute", transform: "translate(400%, -400%)"}}/>
                 </button>
-                <p>
-                    {r}
+                <button onClick={() => incOct()}>
+                    <Image src = {nextoct} width = {200} height = {200} alt = "NextOct" style={{position: "absolute", transform: "translate(1000%, -398%)"}}/>
+                </button>
+                <button onClick={() => changefunky()}>
+                    <Image src = {funkyimage} width = {400} height = {400} alt = "funky" style={{position: "absolute", transform: "translate(600%, -235%)"}}/>
+                </button>
+            </div>
+            {/*Text and stuff*/}
+            <div>
+                <u style={{color:"black", fontSize:"350px", fontFamily:"Papyrus", font:"Papyrus", position:"absolute", transform: "translate(0%, -290%)"}}>
+                    <b>Online Keyboard</b>
+                </u>
+                <p style={{fontSize:"70px", fontFamily:"Papyrus", font:"Papyrus", position:"absolute", transform: "translate(0%, -135%)"}}>
+                    Here is an online keyboard you can play on. Use the arrow keys to change the octave, and press the Funky button to get funky. <br />
+                    Future additions will include more octaves and a nicer website design. <br />
+                    <b>Use the keys Q -{">"} U and 2 -{">"} 7 to play</b>
                 </p>
-            </div> */}
-
+            </div>
         </div>
     );
 }
