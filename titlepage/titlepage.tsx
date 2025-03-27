@@ -3,40 +3,175 @@
 //"use server"
 //import { signIn } from "next-auth/react";
 import Image from "next/image";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import useSound from 'use-sound';
+// import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+//import { createFFmpeg, fetchFile } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@latest/dist/esm/index.js";
 //import boopSfx from 'public/sounds/LegoYodaDead.mp3';
 //import { usePersistantState } from '.';
 //import {mysound} from "C:/Users/victo/jsmusic/public/sounds/LegoYodaDead.mp3"
 //import megasound from "../../sounds/LegoYodaDead.mp3"
 
+// const loadFFmpeg = async () => {
+//     const { createFFmpeg, fetchFile } = await import("@ffmpeg/ffmpeg/dist/ffmpeg.min.js");
+//     return createFFmpeg({ log: true });
+//   };
+
+const ffmpeg = createFFmpeg({ log: true });
+// const ffmpeg = await loadFFmpeg();
 
 export default function Titlepage()
 {
-    // async function getData()
-    // {
-    //     const response = await fetch("/api/events", {method: "GET"});
-    //     if (response.ok)
-    //     {
-    //         const {events} = await response.json()
 
-    //         console.table(events);
+
+    //recording stuff
+    const [recording, setRecording] = useState(false)
+    const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const audioChunksRef = useRef<Blob[]>([]);
+
+    // useEffect(() => {
+    //     if (!ffmpeg.isLoaded()) {
+    //       ffmpeg.load();
     //     }
-    // }
-    // const [a, setA] = useState(0);
-    // const [b, setB] = useState(0);
-    // const [r, setR] = useState(0);
+    //   }, []);
+    useEffect(() => {
+        const loadFfmpeg = async () => {
+          if (!ffmpeg.isLoaded()) {
+            await ffmpeg.load();
+            console.log("FFmpeg loaded successfully!");
+          }
+        };
+        loadFfmpeg();
+      }, []);
 
-    // async function calculate()
-    // {
-    //     const response = await fetch(`/api/events?a=${a}&b=${b}`, {method: "GET", headers: {Authorization: "skibiditoilet"}})
-    //     if (response.ok)
-    //     {
-    //         const data = await response.json();
-    //         setR(data.result);
-    //     }
-    // }
+      const startRecording = async () => {
+        const audioContext = new AudioContext();
+        const destination = audioContext.createMediaStreamDestination();
+        const source = audioContext.createBufferSource();
+        
+        // Connect your useSound output to destination
+        source.connect(destination);
+        source.start();
+    
+        const mediaRecorder = new MediaRecorder(destination.stream);
+        mediaRecorderRef.current = mediaRecorder;
+        audioChunksRef.current = [];
+    
+        mediaRecorder.ondataavailable = (event) => {
+          audioChunksRef.current.push(event.data);
+        };
+    
+        mediaRecorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+          //setAudioBlob(audioBlob);
+    
+          // Convert to MP3
+          const mp3Blob = await convertToMp3(audioBlob);
+          const url = URL.createObjectURL(mp3Blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "recording.mp3";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        };
+    
+        mediaRecorder.start();
+        setRecording(true);
+      };
+    
+      const stopRecording = () => {
+        mediaRecorderRef.current?.stop();
+        setRecording(false);
+      };
+    
+      const convertToMp3 = async (audioBlob: Blob): Promise<Blob> => {
+        // const inputFileName = "input.webm";
+        // const outputFileName = "output.mp3";
+    
+        // await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
+        // await ffmpeg.run("-i", inputFileName, outputFileName);
+        
+        // const data = ffmpeg.FS("readFile", outputFileName);
+        // return new Blob([data], { type: "audio/mp3" });
+        if (!ffmpeg.isLoaded()) {
+            await ffmpeg.load();
+          }
+        const inputFileName = "input.webm";
+        const outputFileName = "output.mp3";
+      
+        await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
+        await ffmpeg.run("-i", inputFileName, outputFileName);
+      
+        const data = ffmpeg.FS("readFile", outputFileName); // Uint8Array
+      
+        // Convert Uint8Array to ArrayBuffer explicitly
+        //const arrayBuffer = data.buffer.slice(0);
+        //const arrayBuffer = data.slice().buffer;
+        const safeBuffer = new Uint8Array(data);
+        //return new Blob([arrayBuffer], { type: "audio/mp3" });
+        return new Blob([safeBuffer], { type: "audio/mp3" });
+      };
 
+    //file stuff
+    const [file, setFile] = useState<File>();
+
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (!file) return
+
+        try
+        {
+            const data = new FormData()
+            data.set('file', file)
+
+            const res = await fetch('/api/upload', {method:'POST', body:data})
+            // handle error
+            if (!res.ok) throw new Error (await res.text())
+        }
+        catch (e: any)
+        {
+            console.error(e)
+        }
+    }
+
+    const recordDef: string = '/record_def.png'
+    const recordStream: string = '/record_stream.png'
+    const recordDone: string = '/record_done.png'
+
+    const [recordButton, recordButtonSet] = useState(recordDef)
+    const [recordState, recordStateSet] = useState(0)
+
+    function record()
+    {
+        recordStateSet(recordState + 1)
+        if (recordState == 2)
+        {
+            recordStateSet(0)
+        }
+
+        //recordStateSet(recordState % 1100)
+    }
+
+    useEffect(() => {
+        switch (recordState)
+        {
+            case 0:
+                recordButtonSet(recordDef)
+                break;
+            case 1:
+                recordButtonSet(recordStream)
+                startRecording();
+                break;
+            case 2:
+                recordButtonSet(recordDone)
+                stopRecording()
+                break;
+        }
+    }, [recordState])
 
 
     let myimage = "/trunksimg.png";
@@ -520,11 +655,30 @@ export default function Titlepage()
     const funkyfont = "Papyrus"
 
     return (
-        
         <div>
             <title>
                 Online Keyboard
             </title>
+
+            <main>
+                <form onSubmit={onSubmit}>
+                    <input 
+                    type="file"
+                    name="file"
+                    onChange={(e) => setFile(e.target.files?.[0])}
+                    />
+                    <input type="submit" value="upload" />
+                </form>
+            </main>
+
+            <div>
+                <button onClick={() => record()}>
+                    <Image src={recordButton} width={200} height={200} alt="recordButton"/>
+                </button>
+                <button onClick={() => startRecording()}>Start</button>
+                <button onClick={() => stopRecording()}>End</button>
+            </div>
+
             <div className = "flex container" style = {{display:"flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
                 <div style = {{display:"flex"}}>
                     <Image src = {key1} width = {whitekeysize} height = {whitekeysize} alt="key1"/>
@@ -552,7 +706,7 @@ export default function Titlepage()
                 </div>
             </div>
             {/*dealing with octave buttons*/}
-            <div>
+            <div style={{justifyContent: "center", alignItems: "center"}}>
                 <button onClick={() => decOct()}>
                     <Image src = {prevoct} width = {100} height = {100} alt = "NextOct" style={{position: "absolute", transform: "translate(450%, -420%)"}}/>
                 </button>
