@@ -1,41 +1,16 @@
 "use client"
-//import { headers } from "next/headers";
-//"use server"
-//import { signIn } from "next-auth/react";
 import Image from "next/image";
 import {useEffect, useState, useRef} from "react";
 import useSound from 'use-sound';
-// import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
-//import { createFFmpeg, fetchFile } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@latest/dist/esm/index.js";
-//import boopSfx from 'public/sounds/LegoYodaDead.mp3';
-//import { usePersistantState } from '.';
-//import {mysound} from "C:/Users/victo/jsmusic/public/sounds/LegoYodaDead.mp3"
-//import megasound from "../../sounds/LegoYodaDead.mp3"
 import { saveAs } from "file-saver";
 
 
 
-// const loadFFmpeg = async () => {
-//     const { createFFmpeg, fetchFile } = await import("@ffmpeg/ffmpeg/dist/ffmpeg.min.js");
-//     return createFFmpeg({ log: true });
-//   };
 
 const ffmpeg = createFFmpeg({ log: true });
-// const ffmpeg = await loadFFmpeg();
-
 export default function Titlepage()
 {
-
-
-    //recording stuff
-    // const [recording, setRecording] = useState(false)
-    // const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-    // const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-    // const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
-    // const audioChunksRef = useRef<Blob[]>([]);
-    // const [isRecording, setIsRecording] = useState(false);
-    //navigator.mediaDevices.getUserMedia({ audio: true });
     const [isRecording, setIsRecording] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
@@ -43,147 +18,15 @@ export default function Titlepage()
     const audioContextRef = useRef<AudioContext | null>(null);
     const destinationRef = useRef<MediaStreamAudioDestinationNode | null>(null);
 
-    // useEffect(() => {
-    //     if (!ffmpeg.isLoaded()) {
-    //       ffmpeg.load();
-    //     }
-    //   }, []);
-    // useEffect(() => {
-    //     const loadFfmpeg = async () => {
-    //       if (!ffmpeg.isLoaded()) {
-    //         await ffmpeg.load();
-    //         console.log("FFmpeg loaded successfully!");
-    //       }
-    //     };
-    //     loadFfmpeg();
-    //   }, []);
-
-    // //   useEffect(() => {
-    // //     // ✅ Request microphone permission on mount
-    // //     navigator.mediaDevices.getUserMedia({ audio: true })
-    // //       .then((stream) => {
-    // //         const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
-    
-    // //         recorder.ondataavailable = (event) => {
-    // //           if (event.data.size > 0) {
-    // //             audioChunksRef.current.push(event.data);
-    // //           }
-    // //         };
-    
-    // //         setMediaRecorder(recorder);
-    // //       })
-    // //       .catch((err) => console.error("Microphone access denied:", err));
-    // //   }, []);
-    // let recorder: any;
-    // useEffect(() => {
-    //     navigator.mediaDevices.getUserMedia({ audio: true })
-    //       .then((stream) => {
-    //         recorder = new MediaRecorder(stream, { mimeType: "audio/webm;codecs=opus" });
-    //         recorder.ondataavailable = (event: any) => {
-    //           if (event.data.size > 0) {
-    //             audioChunksRef.current.push(event.data);
-    //           }
-    //         };
-    //         setMediaRecorder(recorder);
-    //       })
-    //       .catch((err) => console.error("Microphone access denied:", err));
-    //   }, []);
-
-    //   const startRecording = async () => {
-    //     const audioContext = new AudioContext();
-    //     const destination = audioContext.createMediaStreamDestination();
-    //     const source = audioContext.createBufferSource();
-        
-    //     // Connect your useSound output to destination
-    //     source.connect(destination);
-    //     source.start();
-    
-    //     // const mediaRecorder = new MediaRecorder(destination.stream);
-    //     mediaRecorderRef.current = recorder;
-    //     audioChunksRef.current = [];
-    
-    //     mediaRecorder.ondataavailable = (event) => {
-    //       audioChunksRef.current.push(event.data);
-    //     };
-    
-    //     mediaRecorder.onstop = async () => {
-    //       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
-    //       //setAudioBlob(audioBlob);
-    //         //testing
-    //       const webmUrl = URL.createObjectURL(audioBlob);
-    //       const audio = new Audio(webmUrl);
-    //       audio.play();
-    
-    //       // Convert to MP3
-    //       const mp3Blob = await convertToMp3(audioBlob);
-    //       //saveAs(mp3Blob, "recording.mp3");
-    //       const url = URL.createObjectURL(mp3Blob);
-    //       const a = document.createElement("a");
-    //       a.href = url;
-    //       a.download = "recording.mp3";
-    //       document.body.appendChild(a);
-    //       a.click();
-    //       document.body.removeChild(a);
-    //       URL.revokeObjectURL(url);
-    //     };
-    
-    //     mediaRecorder.start();
-    //     setRecording(true);
-    //   };
-    
-    //   const stopRecording = () => {
-    //     mediaRecorderRef.current?.stop();
-    //     setRecording(false);
-    //   };
-    
-    //   const convertToMp3 = async (audioBlob: Blob): Promise<Blob> => {
-    //     // const inputFileName = "input.webm";
-    //     // const outputFileName = "output.mp3";
-    
-    //     // await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
-    //     // await ffmpeg.run("-i", inputFileName, outputFileName);
-        
-    //     // const data = ffmpeg.FS("readFile", outputFileName);
-    //     // return new Blob([data], { type: "audio/mp3" });
-    //     if (!ffmpeg.isLoaded()) {
-    //         await ffmpeg.load();
-    //       }
-    //     const inputFileName = "input.webm";
-    //     const outputFileName = "output.mp3";
-      
-    //     await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
-    //     await ffmpeg.run(
-    //         "-i", inputFileName,  // Input file
-    //         "-ac", "2",           // Convert to 2 audio channels
-    //         "-b:a", "192k",       // Set audio bitrate to 192kbps
-    //         "-ar", "44100",       // Set audio sample rate
-    //         "-y", outputFileName  // Output file
-    //       );
-      
-    //     const data = ffmpeg.FS("readFile", outputFileName); // Uint8Array
-      
-    //     // // Convert Uint8Array to ArrayBuffer explicitly
-    //     // //const arrayBuffer = data.buffer.slice(0);
-    //     // //const arrayBuffer = data.slice().buffer;
-    //     // const safeBuffer = new Uint8Array(data);
-    //     // //return new Blob([arrayBuffer], { type: "audio/mp3" });
-    //     return new Blob([new Uint8Array(data)], { type: "audio/mp3" });
-
-    //     //wav
-    //     // await ffmpeg.run("-i", inputFileName, "-ac", "2", "-ar", "44100", "-y", "output.wav");
-    //     // const data = ffmpeg.FS("readFile", "output.wav");
-    //     // const wavBlob = new Blob([new Uint8Array(data)], { type: "audio/wav" });
-    //     // return wavBlob;
-    //   };
-// ✅ Load FFmpeg once when component mounts
-useEffect(() => {
-    const loadFFmpeg = async () => {
-      if (!ffmpeg.isLoaded()) {
-        await ffmpeg.load();
-      }
-    };
-    loadFFmpeg();
-  }, []);
+    // ✅ Load FFmpeg once when component mounts
+    useEffect(() => {
+        const loadFFmpeg = async () => {
+        if (!ffmpeg.isLoaded()) {
+            await ffmpeg.load();
+        }
+        };
+        loadFFmpeg();
+    }, []);
 
   // ✅ Request microphone access and initialize MediaRecorder
   useEffect(() => {
@@ -218,35 +61,24 @@ useEffect(() => {
       setIsRecording(false);
 
       setTimeout(async () => {
+        console.log("Recording stopped. Converting to MP3...");
         const webmBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
         setAudioBlob(webmBlob);
 
-        // ✅ Debug: Play WebM file before conversion
-        // const webmUrl = URL.createObjectURL(webmBlob);
-        // const testAudio = new Audio(webmUrl);
-        // testAudio.play();
-
-        // await convertToMp3()
         const mp3Blob = await convertToMp3(webmBlob);
+        console.log("MP3 file size:", mp3Blob.size);
+        if (mp3Blob.size === 0) {
+            console.error("MP3 conversion failed, file is empty.");
+            return;
+        }
 
-        // ✅ Trigger download immediately
-        const url = URL.createObjectURL(mp3Blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "recording.mp3";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        saveAs(mp3Blob, "recording.mp3")
       }, 500); // Small delay to allow MediaRecorder to finalize data
     }
   };
 
   // ✅ Convert WebM to MP3
   const convertToMp3 = async  (audioBlob: Blob): Promise<Blob> => {
-    // if (!audioBlob) {
-    //     alert("No audio recorded!");
-    //     return;
-    //   }
     if (!ffmpeg.isLoaded()) {
         console.log("Loading FFmpeg...");
         await ffmpeg.load();
@@ -261,47 +93,23 @@ useEffect(() => {
     }
   
     await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
+    console.log("File written to FFmpeg:", inputFileName);
+
+    ffmpeg.setLogger(({ type, message }) => {
+        console.log(`[FFmpeg ${type}]: ${message}`);
+      });
+      await ffmpeg.run("-i", inputFileName, "-acodec", "libmp3lame", "-b:a", "240k", "-ac", "2", "-ar", "44100", outputFileName);
+    console.log("FFmpeg conversion complete!");
   
-    // ✅ Explicitly specify codec, channels, bitrate, and sample rate
-    await ffmpeg.run(
-      "-i", inputFileName,  // Input file
-      "-vn",                // Ignore video (prevents corruption)
-      "-ac", "2",           // Convert to stereo
-      "-ar", "44100",       // Set audio sample rate
-      "-b:a", "192k",       // Set audio bitrate
-      "-y", outputFileName  // Output file
-    );
-  
-    try {
-        const data = ffmpeg.FS("readFile", outputFileName);
-        return new Blob([new Uint8Array(data)], { type: "audio/mp3" });
-      } catch (err) {
-        console.error("FFmpeg output error:", err);
-        throw new Error("MP3 conversion failed. Check browser compatibility.");
-      }
+  try {
+    const data = ffmpeg.FS("readFile", outputFileName);
+    console.log("MP3 file successfully generated:", outputFileName);
+    return new Blob([data], { type: "audio/mp3" });
+  } catch (err) {
+    console.error("FFmpeg output error:", err);
+    throw new Error("MP3 conversion failed. Check browser compatibility.");
+  }
   };
-
-    // //file stuff
-    const [file, setFile] = useState<File>();
-
-    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (!file) return
-
-        try
-        {
-            const data = new FormData()
-            data.set('file', file)
-
-            const res = await fetch('/api/upload', {method:'POST', body:data})
-            // handle error
-            if (!res.ok) throw new Error (await res.text())
-        }
-        catch (e: any)
-        {
-            console.error(e)
-        }
-    }
 
     const recordDef: string = '/record_def.png'
     const recordStream: string = '/record_stream.png'
@@ -317,8 +125,6 @@ useEffect(() => {
         {
             recordStateSet(0)
         }
-
-        //recordStateSet(recordState % 1100)
     }
 
     useEffect(() => {
@@ -339,32 +145,11 @@ useEffect(() => {
         }
     }, [recordState])
 
-
-    let myimage = "/trunksimg.png";
-    const [myval, myvalSet] = useState(0);
-    const [counter, counterSet] = useState(0);
-    function clicktrunks()
-    {
-        if (counter % 2 == 0)
-        {
-            myvalSet(69);
-        }
-        else
-        {
-            myvalSet(420);
-        }
-        counterSet(counter + 1);
-    }
-
     //start of keyboard
-    const [keyval, keyvalSet] = useState("hello");
-    const [isPressed, isPressedSet] = useState(false);
 
     const keyupimg: string = "/keyupfr.png";
     const keydownimg: string = "/keydownfr.png";
     const sharpkeyupimg: string = "/sharpkeyup.png"
-    const [keyimg, keyimgSet] = useState(keyupimg);
-    const [keyimg2, keyimg2Set] = useState(keyupimg);
 
     const[key1, key1Set] = useState(keyupimg);
     const[key2, key2Set] = useState(keyupimg);
@@ -380,9 +165,6 @@ useEffect(() => {
     const[key5h, key5hSet] = useState(sharpkeyupimg);
     const[key6h, key6hSet] = useState(sharpkeyupimg);
 
-    //const myaudio = new Audio("file:///C:/Users/victo/Downloads/LegoYodaDead.mp3");
-    // const mysound = "/sounds/LegoYodaDead.mp3"
-    // const [play] = useSound(mysound)
 
     const boopSfx = '/sounds/LegoYodaDead.mp3'
     const [playBoop] = useSound(boopSfx, {volume: 0.5});
@@ -438,11 +220,6 @@ useEffect(() => {
     const [dsh, dshSet] = useState(d3sharp)
     const [fsh, fshSet] = useState(f3sharp)
     const [gsh, gshSet] = useState(g3sharp)
-    // const a3sharp = 'sounds/oct3/a3sharp.mp3'
-    // const c3sharp = 'sounds/oct3/c3sharp.mp3'
-    // const d3sharp = 'sounds/oct3/d3sharp.mp3'
-    // const f3sharp = 'sounds/oct3/f3sharp.mp3'
-    // const g3sharp = 'sounds/oct3/g3sharp.mp3'
 
     const normalvolume: number = 0.5;
 
@@ -479,14 +256,8 @@ useEffect(() => {
     const [g3sharpplay, g3sharpplaySet] = useState(false);
 
     let numModes = 2;
-    enum PianoMode
-    {
-        OCT3,
-        OCT4
-    }
 
     const [pianoshift, pianoshiftSet] = useState(0);
-    const [pianomode, pianomodeSet] = useState(PianoMode.OCT3);
 
     const nextoct = "/nextoct.png"
     const prevoct = "/prevoct.png"
@@ -500,10 +271,6 @@ useEffect(() => {
     function decOct()
     {
         pianoshiftSet(pianoshift - 1)
-        // if (pianoshift < 0)
-        // {
-        //     pianoshiftSet(1);
-        // }
     }
 
     const [funkymode, funkymodeSet] = useState(false);
@@ -719,17 +486,12 @@ useEffect(() => {
 
 
     useEffect(() => {
-        //const keyDownHandler = (e: { code: any; }) => keyvalSet(`You pressed ${e.code}`);
-        //document.addEventListener("keydown", keyDownHandler);
-        //keyimgSet("/keydown.png");
         window.addEventListener("keydown", downHandler);
         window.addEventListener("keyup", upHandler);
 
         return () => {
             window.removeEventListener('keydown', downHandler);
             window.removeEventListener('keyup', upHandler);
-            //document.removeEventListener("keydown", keyDownHandler);
-            //keyimgSet("/keyup.png");
         }
     }, []);
 
@@ -851,74 +613,7 @@ useEffect(() => {
             source.connect(audioContextRef.current.destination);
             audioElement.play();
         }
-        // if (b3play)
-        // {
-        //     b3sound();
-        // }
-        // if (c3play)
-        // {
-        //     c3sound();
-        // }
-        // if (d3play)
-        // {
-        //     d3sound();
-        // }
-        // if (e3play)
-        // {
-        //     e3sound();
-        // }
-        // if (f3play)
-        // {
-        //     f3sound();
-        // }
-        // if (g3play)
-        // {
-        //     g3sound();
-        // }
-        // if (c3sharpplay)
-        // {
-        //     c3sharpsound();
-        // }
-        // if (d3sharpplay)
-        // {
-        //     d3sharpsound();
-        // }
-        // if (f3sharpplay)
-        // {
-        //     f3sharpsound();
-        // }
-        // if (g3sharpplay)
-        // {
-        //     g3sharpsound();
-        // }
-        // if (a3sharpplay)
-        // {
-        //     a3sharpsound();
-        // }
-
-
     }, [a3play, b3play, c3play, d3play, e3play, f3play, g3play, c3sharpplay, d3sharpplay, f3sharpplay, g3sharpplay, a3sharpplay])
-
-    // useEffect(() => {
-    //     if (isPressed)
-    //     {
-    //         console.log("hello");
-    //         keyimgSet(keydownimg);
-    //         keyvalSet("true");
-    //     }
-    //     else
-    //     {
-    //         console.log("goodbye");
-    //         keyimgSet(keyupimg);
-    //         keyvalSet("false");
-    //     }
-    // }, []);
-
-    // const imageStyle = {
-    //     borderRadius: '50%',
-    //     border: '1px solid #fff',
-    //   }
-    //style={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}
 
     const whitekeysize = 50;
     const blackkeysize = 30;
@@ -951,6 +646,15 @@ useEffect(() => {
                 <button onClick={() => stopRecording()}>End</button>
                 <button onClick={() => convertToMp3()}>Convert</button> */}
             </div>
+            {/* <div className = "flex container" style = {{display:"flex", justifyContent: "center", alignItems: "center"}}>
+                <button onClick={() => record()}>
+                    <Image src={recordButton} width={200} height={200} alt="recordButton" style={{position: "absolute", transform: "translate(125%, 150%)"}}/>
+                </button>
+                <button onClick={() => startRecording()}>Start</button>
+                <br />
+                <button onClick={() => stopRecording()}>End</button>
+                <button onClick={() => convertToMp3()}>Convert</button>
+            </div> */}
 
             <div className = "flex container" style = {{display:"flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
                 <div style = {{display:"flex"}}>
@@ -995,11 +699,12 @@ useEffect(() => {
                 <u style={{color:"black", fontSize:"100px", fontFamily:textfont, font:textfont, position:"absolute", transform: "translate(40%, -500%)"}}>
                     <b>Online Keyboard</b>
                 </u>
-                <p style={{fontSize:"30px", fontFamily:textfont, font:textfont, position:"absolute", transform: "translate(0%, -125%)"}}>
+                <p style={{fontSize:"30px", fontFamily:textfont, font:textfont, position:"absolute", transform: "translate(0%, -100%)"}}>
                     Here is an online keyboard you can play on. Use the arrow keys to change the octave, and press the Funky button to get <b><i><u>funky</u></i></b>. <br />
                     {/* Future additions will include more octaves, a nicer website design and locked text, <br />
                     as well as possible backend support for making recordings and saving them. <br /> */}
                     Additionally, you can record your audio with the Record button, then press it again to download it. <br />
+                    (Unfortunately, the download only works for FireFox browsers, from what I have tested) <br />
                     <b>Use the keys Q -{">"} U and 2 -{">"} 7 to play</b>
                 </p>
             </div>
