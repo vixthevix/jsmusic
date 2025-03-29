@@ -247,6 +247,11 @@ useEffect(() => {
     //     alert("No audio recorded!");
     //     return;
     //   }
+    if (!ffmpeg.isLoaded()) {
+        console.log("Loading FFmpeg...");
+        await ffmpeg.load();
+        console.log("FFmpeg Loaded!");
+      }
   
     const inputFileName = "input.webm";
     const outputFileName = "output.mp3";
@@ -267,11 +272,13 @@ useEffect(() => {
       "-y", outputFileName  // Output file
     );
   
-    const data = ffmpeg.FS("readFile", outputFileName);
-    const mp3Blob = new Blob([new Uint8Array(data)], { type: "audio/mp3" });
-    return new Blob([new Uint8Array(data)], { type: "audio/mp3" });
-    //saveAs(mp3Blob, "recording.mp3");
-    //return new Blob([new Uint8Array(data)], { type: "audio/mp3" });
+    try {
+        const data = ffmpeg.FS("readFile", outputFileName);
+        return new Blob([new Uint8Array(data)], { type: "audio/mp3" });
+      } catch (err) {
+        console.error("FFmpeg output error:", err);
+        throw new Error("MP3 conversion failed. Check browser compatibility.");
+      }
   };
 
     // //file stuff
@@ -737,7 +744,7 @@ useEffect(() => {
     useEffect(() => {
         if (a3play && audioContextRef.current && destinationRef.current)
         {
-            //a3sound();
+            a3sound();
             const audioElement = new Audio(a);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -746,7 +753,7 @@ useEffect(() => {
         }
         if (b3play && audioContextRef.current && destinationRef.current)
         {
-            //b3sound();
+            b3sound();
             const audioElement = new Audio(b);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -755,7 +762,7 @@ useEffect(() => {
         }
         if (c3play && audioContextRef.current && destinationRef.current)
         {
-            //c3sound();
+            c3sound();
             const audioElement = new Audio(c);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -765,7 +772,7 @@ useEffect(() => {
 
         if (d3play && audioContextRef.current && destinationRef.current)
         {
-            //d3sound();
+            d3sound();
             const audioElement = new Audio(d);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -774,7 +781,7 @@ useEffect(() => {
         }
         if (e3play && audioContextRef.current && destinationRef.current)
         {
-            //e3sound();
+            e3sound();
             const audioElement = new Audio(e);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -783,7 +790,7 @@ useEffect(() => {
         }
         if (f3play && audioContextRef.current && destinationRef.current)
         {
-            //f3sound();
+            f3sound();
             const audioElement = new Audio(f);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -792,7 +799,7 @@ useEffect(() => {
         }
         if (g3play && audioContextRef.current && destinationRef.current)
         {
-            //g3sound();
+            g3sound();
             const audioElement = new Audio(g);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -801,7 +808,7 @@ useEffect(() => {
         }
         if (c3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            //c3sharpsound();
+            c3sharpsound();
             const audioElement = new Audio(csh);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -810,7 +817,7 @@ useEffect(() => {
         }
         if (d3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            //d3sharpsound();
+            d3sharpsound();
             const audioElement = new Audio(dsh);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -819,7 +826,7 @@ useEffect(() => {
         }
         if (f3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            //f3sharpsound();
+            f3sharpsound();
             const audioElement = new Audio(fsh);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -828,7 +835,7 @@ useEffect(() => {
         }
         if (g3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            //g3sharpsound();
+            g3sharpsound();
             const audioElement = new Audio(gsh);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
@@ -837,7 +844,7 @@ useEffect(() => {
         }
         if (a3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            //a3sharpsound();
+            a3sharpsound();
             const audioElement = new Audio(ash);
             const source = audioContextRef.current.createMediaElementSource(audioElement);
             source.connect(destinationRef.current);
