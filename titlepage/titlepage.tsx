@@ -924,7 +924,7 @@ useEffect(() => {
                 Online Keyboard
             </title>
 
-            <main>
+            {/* <main>
                 <form onSubmit={onSubmit}>
                     <input 
                     type="file"
@@ -933,16 +933,16 @@ useEffect(() => {
                     />
                     <input type="submit" value="upload" />
                 </form>
-            </main>
+            </main> */}
 
             <div>
                 <button onClick={() => record()}>
-                    <Image src={recordButton} width={200} height={200} alt="recordButton"/>
+                    <Image src={recordButton} width={200} height={200} alt="recordButton" style={{position: "absolute", transform: "translate(600%, 50%)"}}/>
                 </button>
-                <button onClick={() => startRecording()}>Start</button>
+                {/* <button onClick={() => startRecording()}>Start</button>
                 <br />
                 <button onClick={() => stopRecording()}>End</button>
-                {/* <button onClick={() => convertToMp3()}>Convert</button> */}
+                <button onClick={() => convertToMp3()}>Convert</button> */}
             </div>
 
             <div className = "flex container" style = {{display:"flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
@@ -990,8 +990,9 @@ useEffect(() => {
                 </u>
                 <p style={{fontSize:"30px", fontFamily:textfont, font:textfont, position:"absolute", transform: "translate(0%, -125%)"}}>
                     Here is an online keyboard you can play on. Use the arrow keys to change the octave, and press the Funky button to get <b><i><u>funky</u></i></b>. <br />
-                    Future additions will include more octaves, a nicer website design and locked text, <br />
-                    as well as possible backend support for making recordings and saving them. <br />
+                    {/* Future additions will include more octaves, a nicer website design and locked text, <br />
+                    as well as possible backend support for making recordings and saving them. <br /> */}
+                    Additionally, you can record your audio with the Record button, then press it again to download it. <br />
                     <b>Use the keys Q -{">"} U and 2 -{">"} 7 to play</b>
                 </p>
             </div>
