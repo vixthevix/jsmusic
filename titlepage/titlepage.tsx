@@ -12,6 +12,9 @@ import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 //import { usePersistantState } from '.';
 //import {mysound} from "C:/Users/victo/jsmusic/public/sounds/LegoYodaDead.mp3"
 //import megasound from "../../sounds/LegoYodaDead.mp3"
+import { saveAs } from "file-saver";
+
+
 
 // const loadFFmpeg = async () => {
 //     const { createFFmpeg, fetchFile } = await import("@ffmpeg/ffmpeg/dist/ffmpeg.min.js");
@@ -26,97 +29,252 @@ export default function Titlepage()
 
 
     //recording stuff
-    const [recording, setRecording] = useState(false)
+    // const [recording, setRecording] = useState(false)
+    // const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+    // const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    // const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+    // const audioChunksRef = useRef<Blob[]>([]);
+    // const [isRecording, setIsRecording] = useState(false);
+    //navigator.mediaDevices.getUserMedia({ audio: true });
+    const [isRecording, setIsRecording] = useState(false);
+    const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-    const audioChunksRef = useRef<Blob[]>([]);
+    const audioChunksRef = useRef<BlobPart[]>([]);
+    const audioContextRef = useRef<AudioContext | null>(null);
+    const destinationRef = useRef<MediaStreamAudioDestinationNode | null>(null);
 
     // useEffect(() => {
     //     if (!ffmpeg.isLoaded()) {
     //       ffmpeg.load();
     //     }
     //   }, []);
-    useEffect(() => {
-        const loadFfmpeg = async () => {
-          if (!ffmpeg.isLoaded()) {
-            await ffmpeg.load();
-            console.log("FFmpeg loaded successfully!");
-          }
-        };
-        loadFfmpeg();
-      }, []);
+    // useEffect(() => {
+    //     const loadFfmpeg = async () => {
+    //       if (!ffmpeg.isLoaded()) {
+    //         await ffmpeg.load();
+    //         console.log("FFmpeg loaded successfully!");
+    //       }
+    //     };
+    //     loadFfmpeg();
+    //   }, []);
 
-      const startRecording = async () => {
-        const audioContext = new AudioContext();
-        const destination = audioContext.createMediaStreamDestination();
-        const source = audioContext.createBufferSource();
-        
-        // Connect your useSound output to destination
-        source.connect(destination);
-        source.start();
+    // //   useEffect(() => {
+    // //     // ✅ Request microphone permission on mount
+    // //     navigator.mediaDevices.getUserMedia({ audio: true })
+    // //       .then((stream) => {
+    // //         const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
     
-        const mediaRecorder = new MediaRecorder(destination.stream);
-        mediaRecorderRef.current = mediaRecorder;
-        audioChunksRef.current = [];
+    // //         recorder.ondataavailable = (event) => {
+    // //           if (event.data.size > 0) {
+    // //             audioChunksRef.current.push(event.data);
+    // //           }
+    // //         };
     
-        mediaRecorder.ondataavailable = (event) => {
-          audioChunksRef.current.push(event.data);
-        };
-    
-        mediaRecorder.onstop = async () => {
-          const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
-          //setAudioBlob(audioBlob);
-    
-          // Convert to MP3
-          const mp3Blob = await convertToMp3(audioBlob);
-          const url = URL.createObjectURL(mp3Blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "recording.mp3";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        };
-    
-        mediaRecorder.start();
-        setRecording(true);
-      };
-    
-      const stopRecording = () => {
-        mediaRecorderRef.current?.stop();
-        setRecording(false);
-      };
-    
-      const convertToMp3 = async (audioBlob: Blob): Promise<Blob> => {
-        // const inputFileName = "input.webm";
-        // const outputFileName = "output.mp3";
-    
-        // await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
-        // await ffmpeg.run("-i", inputFileName, outputFileName);
-        
-        // const data = ffmpeg.FS("readFile", outputFileName);
-        // return new Blob([data], { type: "audio/mp3" });
-        if (!ffmpeg.isLoaded()) {
-            await ffmpeg.load();
-          }
-        const inputFileName = "input.webm";
-        const outputFileName = "output.mp3";
-      
-        await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
-        await ffmpeg.run("-i", inputFileName, outputFileName);
-      
-        const data = ffmpeg.FS("readFile", outputFileName); // Uint8Array
-      
-        // Convert Uint8Array to ArrayBuffer explicitly
-        //const arrayBuffer = data.buffer.slice(0);
-        //const arrayBuffer = data.slice().buffer;
-        const safeBuffer = new Uint8Array(data);
-        //return new Blob([arrayBuffer], { type: "audio/mp3" });
-        return new Blob([safeBuffer], { type: "audio/mp3" });
-      };
+    // //         setMediaRecorder(recorder);
+    // //       })
+    // //       .catch((err) => console.error("Microphone access denied:", err));
+    // //   }, []);
+    // let recorder: any;
+    // useEffect(() => {
+    //     navigator.mediaDevices.getUserMedia({ audio: true })
+    //       .then((stream) => {
+    //         recorder = new MediaRecorder(stream, { mimeType: "audio/webm;codecs=opus" });
+    //         recorder.ondataavailable = (event: any) => {
+    //           if (event.data.size > 0) {
+    //             audioChunksRef.current.push(event.data);
+    //           }
+    //         };
+    //         setMediaRecorder(recorder);
+    //       })
+    //       .catch((err) => console.error("Microphone access denied:", err));
+    //   }, []);
 
-    //file stuff
+    //   const startRecording = async () => {
+    //     const audioContext = new AudioContext();
+    //     const destination = audioContext.createMediaStreamDestination();
+    //     const source = audioContext.createBufferSource();
+        
+    //     // Connect your useSound output to destination
+    //     source.connect(destination);
+    //     source.start();
+    
+    //     // const mediaRecorder = new MediaRecorder(destination.stream);
+    //     mediaRecorderRef.current = recorder;
+    //     audioChunksRef.current = [];
+    
+    //     mediaRecorder.ondataavailable = (event) => {
+    //       audioChunksRef.current.push(event.data);
+    //     };
+    
+    //     mediaRecorder.onstop = async () => {
+    //       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+    //       //setAudioBlob(audioBlob);
+    //         //testing
+    //       const webmUrl = URL.createObjectURL(audioBlob);
+    //       const audio = new Audio(webmUrl);
+    //       audio.play();
+    
+    //       // Convert to MP3
+    //       const mp3Blob = await convertToMp3(audioBlob);
+    //       //saveAs(mp3Blob, "recording.mp3");
+    //       const url = URL.createObjectURL(mp3Blob);
+    //       const a = document.createElement("a");
+    //       a.href = url;
+    //       a.download = "recording.mp3";
+    //       document.body.appendChild(a);
+    //       a.click();
+    //       document.body.removeChild(a);
+    //       URL.revokeObjectURL(url);
+    //     };
+    
+    //     mediaRecorder.start();
+    //     setRecording(true);
+    //   };
+    
+    //   const stopRecording = () => {
+    //     mediaRecorderRef.current?.stop();
+    //     setRecording(false);
+    //   };
+    
+    //   const convertToMp3 = async (audioBlob: Blob): Promise<Blob> => {
+    //     // const inputFileName = "input.webm";
+    //     // const outputFileName = "output.mp3";
+    
+    //     // await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
+    //     // await ffmpeg.run("-i", inputFileName, outputFileName);
+        
+    //     // const data = ffmpeg.FS("readFile", outputFileName);
+    //     // return new Blob([data], { type: "audio/mp3" });
+    //     if (!ffmpeg.isLoaded()) {
+    //         await ffmpeg.load();
+    //       }
+    //     const inputFileName = "input.webm";
+    //     const outputFileName = "output.mp3";
+      
+    //     await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
+    //     await ffmpeg.run(
+    //         "-i", inputFileName,  // Input file
+    //         "-ac", "2",           // Convert to 2 audio channels
+    //         "-b:a", "192k",       // Set audio bitrate to 192kbps
+    //         "-ar", "44100",       // Set audio sample rate
+    //         "-y", outputFileName  // Output file
+    //       );
+      
+    //     const data = ffmpeg.FS("readFile", outputFileName); // Uint8Array
+      
+    //     // // Convert Uint8Array to ArrayBuffer explicitly
+    //     // //const arrayBuffer = data.buffer.slice(0);
+    //     // //const arrayBuffer = data.slice().buffer;
+    //     // const safeBuffer = new Uint8Array(data);
+    //     // //return new Blob([arrayBuffer], { type: "audio/mp3" });
+    //     return new Blob([new Uint8Array(data)], { type: "audio/mp3" });
+
+    //     //wav
+    //     // await ffmpeg.run("-i", inputFileName, "-ac", "2", "-ar", "44100", "-y", "output.wav");
+    //     // const data = ffmpeg.FS("readFile", "output.wav");
+    //     // const wavBlob = new Blob([new Uint8Array(data)], { type: "audio/wav" });
+    //     // return wavBlob;
+    //   };
+// ✅ Load FFmpeg once when component mounts
+useEffect(() => {
+    const loadFFmpeg = async () => {
+      if (!ffmpeg.isLoaded()) {
+        await ffmpeg.load();
+      }
+    };
+    loadFFmpeg();
+  }, []);
+
+  // ✅ Request microphone access and initialize MediaRecorder
+  useEffect(() => {
+    audioContextRef.current = new AudioContext();
+    destinationRef.current = audioContextRef.current.createMediaStreamDestination();
+
+    // ✅ Use MediaRecorder on the new destination stream
+    const recorder = new MediaRecorder(destinationRef.current.stream, { mimeType: "audio/webm" });
+
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunksRef.current.push(event.data);
+      }
+    };
+
+    setMediaRecorder(recorder);
+  }, []);
+
+  // ✅ Start recording
+  const startRecording = () => {
+    if (mediaRecorder) {
+      audioChunksRef.current = [];
+      mediaRecorder.start();
+      setIsRecording(true);
+    }
+  };
+
+  // ✅ Stop recording and play WebM file
+  const stopRecording = async () => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+
+      setTimeout(async () => {
+        const webmBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        setAudioBlob(webmBlob);
+
+        // ✅ Debug: Play WebM file before conversion
+        // const webmUrl = URL.createObjectURL(webmBlob);
+        // const testAudio = new Audio(webmUrl);
+        // testAudio.play();
+
+        // await convertToMp3()
+        const mp3Blob = await convertToMp3(webmBlob);
+
+        // ✅ Trigger download immediately
+        const url = URL.createObjectURL(mp3Blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "recording.mp3";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, 500); // Small delay to allow MediaRecorder to finalize data
+    }
+  };
+
+  // ✅ Convert WebM to MP3
+  const convertToMp3 = async  (audioBlob: Blob): Promise<Blob> => {
+    // if (!audioBlob) {
+    //     alert("No audio recorded!");
+    //     return;
+    //   }
+  
+    const inputFileName = "input.webm";
+    const outputFileName = "output.mp3";
+  
+    if (!ffmpeg.isLoaded()) {
+      await ffmpeg.load();
+    }
+  
+    await ffmpeg.FS("writeFile", inputFileName, await fetchFile(audioBlob));
+  
+    // ✅ Explicitly specify codec, channels, bitrate, and sample rate
+    await ffmpeg.run(
+      "-i", inputFileName,  // Input file
+      "-vn",                // Ignore video (prevents corruption)
+      "-ac", "2",           // Convert to stereo
+      "-ar", "44100",       // Set audio sample rate
+      "-b:a", "192k",       // Set audio bitrate
+      "-y", outputFileName  // Output file
+    );
+  
+    const data = ffmpeg.FS("readFile", outputFileName);
+    const mp3Blob = new Blob([new Uint8Array(data)], { type: "audio/mp3" });
+    return new Blob([new Uint8Array(data)], { type: "audio/mp3" });
+    //saveAs(mp3Blob, "recording.mp3");
+    //return new Blob([new Uint8Array(data)], { type: "audio/mp3" });
+  };
+
+    // //file stuff
     const [file, setFile] = useState<File>();
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -161,6 +319,7 @@ export default function Titlepage()
         {
             case 0:
                 recordButtonSet(recordDef)
+                //convertToMp3()
                 break;
             case 1:
                 recordButtonSet(recordStream)
@@ -576,54 +735,159 @@ export default function Titlepage()
     }, [isplaying]);
 
     useEffect(() => {
-        if (a3play)
+        if (a3play && audioContextRef.current && destinationRef.current)
         {
-            a3sound();
+            //a3sound();
+            const audioElement = new Audio(a);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (b3play)
+        if (b3play && audioContextRef.current && destinationRef.current)
         {
-            b3sound();
+            //b3sound();
+            const audioElement = new Audio(b);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (c3play)
+        if (c3play && audioContextRef.current && destinationRef.current)
         {
-            c3sound();
+            //c3sound();
+            const audioElement = new Audio(c);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (d3play)
+
+        if (d3play && audioContextRef.current && destinationRef.current)
         {
-            d3sound();
+            //d3sound();
+            const audioElement = new Audio(d);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (e3play)
+        if (e3play && audioContextRef.current && destinationRef.current)
         {
-            e3sound();
+            //e3sound();
+            const audioElement = new Audio(e);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (f3play)
+        if (f3play && audioContextRef.current && destinationRef.current)
         {
-            f3sound();
+            //f3sound();
+            const audioElement = new Audio(f);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (g3play)
+        if (g3play && audioContextRef.current && destinationRef.current)
         {
-            g3sound();
+            //g3sound();
+            const audioElement = new Audio(g);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (c3sharpplay)
+        if (c3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            c3sharpsound();
+            //c3sharpsound();
+            const audioElement = new Audio(csh);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (d3sharpplay)
+        if (d3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            d3sharpsound();
+            //d3sharpsound();
+            const audioElement = new Audio(dsh);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (f3sharpplay)
+        if (f3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            f3sharpsound();
+            //f3sharpsound();
+            const audioElement = new Audio(fsh);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (g3sharpplay)
+        if (g3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            g3sharpsound();
+            //g3sharpsound();
+            const audioElement = new Audio(gsh);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
-        if (a3sharpplay)
+        if (a3sharpplay && audioContextRef.current && destinationRef.current)
         {
-            a3sharpsound();
+            //a3sharpsound();
+            const audioElement = new Audio(ash);
+            const source = audioContextRef.current.createMediaElementSource(audioElement);
+            source.connect(destinationRef.current);
+            source.connect(audioContextRef.current.destination);
+            audioElement.play();
         }
+        // if (b3play)
+        // {
+        //     b3sound();
+        // }
+        // if (c3play)
+        // {
+        //     c3sound();
+        // }
+        // if (d3play)
+        // {
+        //     d3sound();
+        // }
+        // if (e3play)
+        // {
+        //     e3sound();
+        // }
+        // if (f3play)
+        // {
+        //     f3sound();
+        // }
+        // if (g3play)
+        // {
+        //     g3sound();
+        // }
+        // if (c3sharpplay)
+        // {
+        //     c3sharpsound();
+        // }
+        // if (d3sharpplay)
+        // {
+        //     d3sharpsound();
+        // }
+        // if (f3sharpplay)
+        // {
+        //     f3sharpsound();
+        // }
+        // if (g3sharpplay)
+        // {
+        //     g3sharpsound();
+        // }
+        // if (a3sharpplay)
+        // {
+        //     a3sharpsound();
+        // }
 
 
     }, [a3play, b3play, c3play, d3play, e3play, f3play, g3play, c3sharpplay, d3sharpplay, f3sharpplay, g3sharpplay, a3sharpplay])
@@ -676,7 +940,9 @@ export default function Titlepage()
                     <Image src={recordButton} width={200} height={200} alt="recordButton"/>
                 </button>
                 <button onClick={() => startRecording()}>Start</button>
+                <br />
                 <button onClick={() => stopRecording()}>End</button>
+                {/* <button onClick={() => convertToMp3()}>Convert</button> */}
             </div>
 
             <div className = "flex container" style = {{display:"flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
